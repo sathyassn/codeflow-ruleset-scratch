@@ -1,0 +1,1 @@
+TSK-1080 refusal fixture: the first pull request into the line
