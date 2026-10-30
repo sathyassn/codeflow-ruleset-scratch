@@ -1,0 +1,1 @@
+TSK-1080 refusal fixture: a green pull request into main, refused without the bypass
