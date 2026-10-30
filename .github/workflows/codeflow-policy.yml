@@ -1,0 +1,32 @@
+# TSK-1080 hosted fixture: a stand-in for the policy workflow TSK-336
+# ships. The verdict jobs are named as ruleset B and C require them.
+name: codeflow policy
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+permissions: {}
+jobs:
+  standards:
+    name: "trusted: commit standards"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: where this job came from
+        run: |
+          echo "workflow_ref=$GITHUB_WORKFLOW_REF"
+          echo "workflow_sha=$GITHUB_WORKFLOW_SHA"
+          echo "base_ref=$GITHUB_BASE_REF"
+      - name: fixture failure on request
+        if: contains(github.event.pull_request.title, 'fixture-fail')
+        run: |
+          echo "the pull request title asks this verdict to fail"
+          exit 1
+  scan:
+    name: "trusted: secret scan"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: the environment secret is not visible to this job
+        env:
+          KEY: ${{ secrets.CODEFLOW_AUTHORITY_APP_KEY }}
+        run: |
+          echo "workflow_ref=$GITHUB_WORKFLOW_REF"
+          if [ -z "$KEY" ]; then echo "environment secret: empty"; else echo "environment secret: present"; exit 1; fi

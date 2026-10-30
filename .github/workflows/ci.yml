@@ -1,0 +1,11 @@
+# TSK-1080 hosted fixture: the test verdict ruleset B and C require.
+name: ci
+on:
+  pull_request:
+permissions: {}
+jobs:
+  gates:
+    name: codeflow gates
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "codeflow gates passed"
